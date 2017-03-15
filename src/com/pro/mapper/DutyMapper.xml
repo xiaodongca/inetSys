@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.dao.DutyDao">
+
+	<resultMap id="dutyResultMap" type="duty">
+		<id column="D_ID" property="d_id" />
+		<result column="D_TIME" property="d_time" />
+		<result column="D_ADDRESS" property="d_address" />
+		<result column="ADMIN_NAME" property="andmin_name" />
+		<association property="assPerson" javaType="assPerson">
+			<id column="APF_ID" property="apf_id" />
+			<result column="APF_NAME" property="apf_name" />
+			<result column="APF_NUMBER" property="apf_number" />
+			<result column="TDIRRECTIN" property="tdirrectin" />
+			<result column="PASSWORD" property="password" />
+			<result column="CREDIT" property="credit" />
+			<result column="TEL" property="tel" />
+			<result column="EMAIL" property="email" />
+			<result column="QQ" property="qq" />
+			<association property="powers" javaType="powers">
+				<id column="P_ID" property="p_id" />
+				<result column="P_NAME" property="p_name" />
+				<result column="P_RANGE" property="p_range" />
+			</association>
+		</association>
+	</resultMap>
+	
+	
+
+	<select id="selectAll" resultMap="dutyResultMap">
+		select * from duty d , ass_person a
+		where d.APF_ID = a.APF_ID
+	</select>
+
+	<select id="selectOne" resultMap="dutyResultMap" parameterType="int">
+		select * from duty d , ass_person a
+		where d.APF_ID = a.APF_ID
+		and d.APF_ID = #{id}
+	</select>
+
+	<insert id="add" parameterType="duty">
+		insert into duty
+		(
+		D_ID,APF_ID,D_TIME,D_ADDRESS,
+		ADMIN_NAME
+		)values
+		(
+		seq_duty.NEXTVAL,
+		#{assPerson.apf_id},
+		#{d_time},
+		#{d_address},
+		#{andmin_name}
+		)
+	</insert>
+
+	<update id="modify" parameterType="duty">
+		update duty set
+		APF_ID =
+		#{assPerson.apf_id},
+		D_TIME = #{d_time},
+		D_ADDRESS = #{d_address},
+		ADMIN_NAME = #{andmin_name}
+		where D_ID = #{d_id}
+	</update>
+
+
+	<delete id="delete" parameterType="int">
+		delete from duty 
+		where D_ID = #{id}
+	</delete>
+</mapper>

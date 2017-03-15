@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.dao.AssPersonDao">
+
+	<resultMap id="assPersonResultMap" type="assPerson">
+		<id column="APF_ID" property="apf_id" />
+		<result column="APF_NAME" property="apf_name" />
+		<result column="APF_NUMBER" property="apf_number" />
+		<result column="TDIRRECTIN" property="tdirrectin" />
+		<result column="PASSWORD" property="password" />
+		<result column="CREDIT" property="credit" />
+		<result column="TEL" property="tel" />
+		<result column="EMAIL" property="email" />
+		<result column="QQ" property="qq" />
+		<result column="p_id" property="p_id"/>
+		<association property="powers" javaType="powers">
+			<id column="P_ID" property="p_id" />
+			<result column="P_NAME" property="p_name" />
+			<result column="P_RANGE" property="p_range" />
+		</association>
+	</resultMap>
+
+
+	<select id="login" resultMap="assPersonResultMap" parameterType="assPerson">
+		select * from ass_person a,powers p
+		where
+		APF_NUMBER = #{apf_number}
+		and
+		PASSWORD = #{password} 
+		and
+		a.P_ID = p.P_ID
+	</select>
+
+	<select id="selectAll" resultMap="assPersonResultMap">
+		select * from ass_person a,powers p 
+		where a.P_ID = p.P_ID
+	</select>
+
+	<select id="selectOne" resultMap="assPersonResultMap" parameterType="int">
+		select * from ass_person a,powers p
+		where a.APF_ID = #{id} and a.P_ID = p.P_ID
+	</select>
+
+	<insert id="add" parameterType="assPerson">
+		insert into ass_person
+		(
+		APF_ID,P_ID,APF_NAME,APF_NUMBER,
+		TDIRRECTIN,PASSWORD,CREDIT,TEL,EMAIL,QQ
+		)values
+		(
+		seq_ASS_PERSON.NEXTVAL,
+		#{p_id,jdbcType=NUMERIC},
+		#{apf_name,jdbcType=VARCHAR},
+		#{apf_number,jdbcType=VARCHAR},
+		#{tdirrectin,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{credit,jdbcType=VARCHAR},
+		#{tel,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{qq,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="modify" parameterType="assPerson">
+		update ass_person set
+		P_ID = #{p_id},
+		APF_NAME = #{apf_name},
+		APF_NUMBER = #{apf_number},
+		TDIRRECTIN = #{tdirrectin},
+		PASSWORD = #{password},
+		CREDIT = #{credit},
+		TEL = #{tel},
+		EMAIL = #{email},
+		QQ = #{qq}
+		where APF_ID = #{apf_id}
+	</update>
+	<update id="upPassword" parameterType="assPerson">
+		update ass_person set
+		PASSWORD = #{password}
+		where APF_ID = #{apf_id}
+	</update>
+
+
+	<delete id="delete" parameterType="int">
+		delete from ass_person 
+		where APF_ID = #{apf_id}
+	</delete>
+	<select id="selectPage" resultMap="assPersonResultMap">
+    select*from
+    (
+      select A.*,
+      ROWNUM RN FROM(SELECT *FROM ass_person  ) a ORDER BY a.apf_id
+    ) a ,powers p  
+    WHERE
+    a.P_ID = p.P_ID and
+    RN BETWEEN
+		#{0} AND #{1}
+	</select>
+	<select id="counts" resultType="int">
+		select count(*) from ass_person
+	</select>
+
+</mapper>

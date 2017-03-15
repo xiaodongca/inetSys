@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.dao.FinanceDao">
+
+	<resultMap id="financeResultMap" type="finance">
+		<id column="ID" property="id" />
+		<result column="TYPE" property="type" />
+		<result column="MONEY" property="money" />
+		<result column="EVENT" property="event" />
+		<result column="E_TIME" property="e_time" />
+		<result column="AF_TIME" property="af_time" />
+		<result column="ADMIN_NAME" property="admin_name" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="financeResultMap">
+		select * from finance
+	</select>
+
+	<select id="selectOne" resultMap="financeResultMap" parameterType="int">
+		select * from finance
+		where ID = #{id}
+	</select>
+
+	<insert id="add" parameterType="finance">
+		insert into finance
+		(
+		ID,TYPE,MONEY,EVENT,E_TIME,AF_TIME,ADMIN_NAME
+		)values
+		(
+		seq_finance.NEXTVAL,
+		#{type},
+		#{money},
+		#{event},
+		#{e_time},
+		#{af_time},
+		#{admin_name}
+		)
+	</insert>
+
+	<update id="modify" parameterType="finance">
+		update news finance
+		TYPE =#{type},
+		MONEY = #{money},
+		EVENT = #{event},
+		E_TIME = #{e_time}
+		AF_TIME = #{af_time}
+		ADMIN_NAME = #{admin_name}
+		where ID = #{id}
+	</update>
+
+
+	<delete id="delete" parameterType="int">
+		delete from finance 
+		where ID = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.dao.AdminUserDao">
+
+	<resultMap id="adminUserResultMap" type="adminUser">
+		<id column="ID" property="id" />
+		<result column="ADMIN_NAME" property="admin_name" />
+		<result column="ADMIN_ACC" property="admin_acc" />
+		<result column="PASSWORD" property="password" />
+		<association property="powers" javaType="powers">
+			<id column="P_ID" property="p_id" />
+			<result column="P_NAME" property="p_name" />
+			<result column="P_RANGE" property="p_range" />
+		</association>
+	</resultMap>
+
+
+	<select id="login" resultMap="adminUserResultMap" parameterType="adminUser">
+		select *
+		from admin_user a,powers p
+		where
+		ADMIN_ACC = #{admin_acc}
+		and
+		PASSWORD = #{password}
+		and
+		a.P_ID = p.P_ID
+		
+	</select>
+
+	<select id="selectAll" resultMap="adminUserResultMap">
+		select * from admin_user a,powers p 
+		where a.P_ID = p.P_ID
+	</select>
+
+	<select id="selectOne" resultMap="adminUserResultMap" parameterType="int">
+		select * from admin_user a,powers p
+		where a.ID = #{id} and a.P_ID = p.P_ID
+	</select>
+
+	<insert id="add" parameterType="adminUser">
+		insert into admin_user 
+		(
+		ID,P_ID,ADMIN_NAME,ADMIN_ACC,PASSWORD
+		)values
+		(
+		seq_admin_users.NEXTVAL,
+		#{powers.p_id},
+		#{admin_name},
+		#{admin_acc},
+		#{password}
+		)
+	</insert>
+
+	<update id="modify" parameterType="adminUser">
+		update admin_user set
+		P_ID =
+		#{powers.p_id},
+		ADMIN_NAME = #{admin_name},
+		ADMIN_ACC = #{admin_acc},
+		PASSWORD =
+		#{password}
+		where ID = #{id}
+	</update>
+
+
+	<delete id="delete" parameterType="int">
+		delete from admin_user where
+		ID = #{id}
+	</delete>
+
+</mapper>

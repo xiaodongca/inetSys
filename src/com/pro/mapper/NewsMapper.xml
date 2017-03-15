@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.dao.NewsDao">
+
+	<resultMap id="newsResultMap" type="news">
+		<id column="ID" property="id" />
+		<result column="N_TITLE" property="n_title" />
+		<result column="N_CONTENT" property="n_content" />
+		<result column="N_TIME" property="n_time" />
+		<result column="ADMIN_NAME" property="admin_name" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="newsResultMap">
+		select * from news
+	</select>
+
+	<select id="selectOne" resultMap="newsResultMap" parameterType="int">
+		select * from news
+		where ID = #{id}
+	</select>
+
+	<insert id="add" parameterType="news">
+		insert into news
+		(
+		ID,N_TITLE,N_CONTENT,N_TIME,ADMIN_NAME
+		)values
+		(
+		seq_news.NEXTVAL,
+		#{n_title},
+		#{n_content},
+		#{n_time},
+		#{admin_name}
+		)
+	</insert>
+
+	<update id="modify" parameterType="news">
+		update news set
+		N_TITLE =#{n_title},
+		N_CONTENT = #{n_content},
+		N_TIME = #{n_time},
+		ADMIN_NAME = #{admin_name}
+		where ID = #{id}
+	</update>
+
+
+	<delete id="delete" parameterType="int">
+		delete from news 
+		where ID = #{id}
+	</delete>
+</mapper>

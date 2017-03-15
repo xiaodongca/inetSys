@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.dao.NewStudentDao">
+
+	<resultMap id="newStudentResultMap" type="newStudent">
+		<id column="ID" property="id" />
+		<result column="N_NAME" property="n_name" />
+		<result column="SNUMBER" property="snumber" />
+		<result column="TDIRECTION" property="tdirection" />
+		<result column="TEL" property="tel" />
+		<result column="CLASS" property="n_class" />
+		<result column="EMAIL" property="email" />
+		<result column="QQ" property="qq" />
+		<result column="HOBBY" property="hobby" />
+		<result column="SPECALTY" property="specalty" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="newStudentResultMap">
+		select * from new_student
+	</select>
+
+	<select id="selectOne" resultMap="newStudentResultMap" parameterType="int">
+		select * from new_student 
+		where ID = #{id}
+	</select>
+
+	<insert id="add" parameterType="newStudent">
+		insert into new_student
+		(
+		ID,N_NAME,SNUMBER,TDIRECTION,TEL,
+		CLASS,EMAIL,QQ,HOBBY,SPECALTY
+		)values
+		(
+		seq_new_student.NEXTVAL,
+		#{n_name},
+		#{snumber},
+		#{tdirection},
+		#{tel},
+		#{n_class},
+		#{email},
+		#{qq},
+		#{hobby},
+		#{specalty}
+		)
+	</insert>
+
+	<update id="modify" parameterType="newStudent">
+		update new_student set
+		N_NAME =#{n_name},
+		SNUMBER = #{snumber},
+		TDIRECTION = #{tdirection},
+		TEL = #{tel},
+		CLASS = #{n_class},
+		EMAIL = #{email},
+		QQ = #{qq},
+		HOBBY = #{hobby},
+		SPECALTY = #{specalty}
+		where ID = #{id}
+	</update>
+
+
+	<delete id="delete" parameterType="int">
+		delete from new_student 
+		where ID = #{id}
+	</delete>
+	<select id="selectPage" resultMap="newStudentResultMap">
+		select*from
+		(
+			select A.*,
+			ROWNUM RN FROM(SELECT *FROM new_student) a ORDER BY ID
+		)
+		WHERE
+		RN BETWEEN
+		#{0} AND #{1}
+	</select>
+	<select id="counts" resultType="int">
+		select count(*) from new_student
+	</select>
+</mapper>

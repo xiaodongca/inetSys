@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.dao.ActPersonDao">
+
+	<resultMap id="actPersonResultMap" type="actPerson">
+		<id column="ID" property="id" />
+		<association property="activity" javaType="activity">
+			<id column="A_ID" property="a_id" />
+			<result column="A_NAME" property="a_name" />
+			<result column="A_CONTENT" property="a_content" />
+			<result column="CREDIT" property="credit" />
+			<result column="START_TIME" property="start_time" />
+			<result column="END_TIME" property="end_time" />
+			<result column="ADMIN_NAME" property="admin_name" />
+		</association>
+		<association property="assPerson" javaType="assPerson">
+			<id column="APF_ID" property="apf_id" />
+			<result column="APF_NAME" property="apf_name" />
+			<result column="APF_NUMBER" property="apf_number" />
+			<result column="TDIRRECTIN" property="tdirrectin" />
+			<result column="PASSWORD" property="password" />
+			<result column="CREDIT" property="credit" />
+			<result column="TEL" property="tel" />
+			<result column="EMAIL" property="email" />
+			<result column="QQ" property="qq" />
+			<association property="powers" javaType="powers">
+				<id column="P_ID" property="p_id" />
+				<result column="P_NAME" property="p_name" />
+				<result column="P_RANGE" property="p_range" />
+			</association>
+		</association>
+
+
+	</resultMap>
+
+
+	<select id="selectAll" resultMap="actPersonResultMap">
+		select * from
+		act_person a,
+		activity b,
+		ass_person c
+		where a.A_ID = b.A_ID
+		and a.APF_ID = c.APF_ID
+	</select>
+
+	<select id="selectOne" resultMap="actPersonResultMap"
+		parameterType="int">
+		select * from
+		act_person a,
+		activity b,
+		ass_person c
+		where a.A_ID = b.A_ID
+		and a.APF_ID = c.APF_ID
+		and a.ID = #{id}
+	</select>
+
+	<insert id="add" parameterType="actPerson">
+		insert into act_person
+		(
+		A_ID,APF_ID,ID
+		)values
+		(
+		#{activity.a_id},
+		#{assPerson.apf_id},
+		seq_powers.NEXTVAL
+		)
+	</insert>
+
+	<update id="modify" parameterType="actPerson">
+		update act_person set
+		A_ID=#{activity.a_id},
+		APF_ID = #{assPerson.apf_id}
+		where ID = #{id}
+	</update>
+
+
+	<delete id="delete" parameterType="int">
+		delete from act_person 
+		where ID = #{id}
+	</delete>
+</mapper>

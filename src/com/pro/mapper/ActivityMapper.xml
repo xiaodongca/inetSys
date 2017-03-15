@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.dao.ActivityDao">
+
+	<resultMap id="activityResultMap" type="activity">
+		<id column="A_ID" property="a_id" />
+		<result column="A_NAME" property="a_name" />
+		<result column="A_CONTENT" property="a_content" />
+		<result column="CREDIT" property="credit" />
+		<result column="START_TIME" property="start_time" />
+		<result column="END_TIME" property="end_time" />
+		<result column="ADMIN_NAME" property="admin_name" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="activityResultMap">
+		select * from activity
+	</select>
+
+	<select id="selectOne" resultMap="activityResultMap" parameterType="int">
+		select * from activity 
+		where A_ID = #{id}
+	</select>
+
+	<insert id="add" parameterType="activity">
+		insert into activity
+		(
+		A_ID,A_NAME,A_CONTENT,CREDIT,
+		START_TIME,END_TIME,ADMIN_NAME
+		)values
+		(
+		seq_activity.NEXTVAL,
+		#{a_name},
+		#{a_content},
+		#{credit},
+		#{start_time},
+		#{end_time},
+		#{admin_name}
+		)
+	</insert>
+
+	<update id="modify" parameterType="activity">
+		update activity set
+		A_NAME =#{a_name},
+		A_CONTENT = #{a_content},
+		CREDIT = #{credit},
+		START_TIME = #{start_time},
+		END_TIME = #{end_time},
+		ADMIN_NAME = #{admin_name}
+		where A_ID = #{a_id}
+	</update>
+
+
+	<delete id="delete" parameterType="int">
+		delete from activity 
+		where A_ID = #{id}
+	</delete>
+</mapper>

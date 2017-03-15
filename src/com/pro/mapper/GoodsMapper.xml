@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pro.dao.GoodsDao">
+
+	<resultMap id="goodsResultMap" type="goods">
+		<id column="ID" property="id" />
+		<result column="G_NAME" property="g_name" />
+		<result column="G_NUMBER" property="g_number" />
+		<result column="G_WORTH" property="g_worth" />
+		<result column="REMARKS" property="remarks" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="goodsResultMap">
+		select * from goods
+	</select>
+
+	<select id="selectOne" resultMap="goodsResultMap" parameterType="int">
+		select * from goods
+		where ID = #{id}
+	</select>
+
+	<insert id="add" parameterType="goods">
+		insert into goods
+		(
+		ID,G_NAME,G_NUMBER,G_WORTH,REMARKS
+		)values
+		(
+		seq_goods.NEXTVAL,
+		#{g_name},
+		#{g_number},
+		#{g_worth},
+		#{remarks}
+		)
+	</insert>
+
+	<update id="modify" parameterType="goods">
+		update goods set
+		G_NAME =#{g_name},
+		G_NUMBER = #{g_number},
+		G_WORTH = #{g_worth},
+		REMARKS = #{remarks}
+		where ID = #{id}
+	</update>
+
+
+	<delete id="delete" parameterType="int">
+		delete from goods 
+		where ID = #{id}
+	</delete>
+</mapper>
